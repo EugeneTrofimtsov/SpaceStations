@@ -2,8 +2,6 @@ package spaceX
 
 import spaceX.blocks._
 
-import scala.collection.mutable.ListBuffer
-
 object App {
 
   def defaultStation(): Unit = {
@@ -22,30 +20,9 @@ object App {
     "SP,2,12,panel|HM,8,12,room|SP,2,12,panel"
   )
 
-  def parseStation(blocks: Array[String]): List[List[Block]] = {
-    val stationInfo = ListBuffer[List[Block]]()
-    val lineInfo = ListBuffer[Block]()
-    for (line <- blocks) {
-      for (block <- line.split('|')) {
-        val info = block.split(',')
-        lineInfo.append(
-          info.head match {
-            case inf if inf == SP.toString => SolarPanel(info(1).toInt, info(2).toInt, info(3))
-            case inf if inf == HM.toString => HumanModule(info(1).toInt, info(2).toInt, info(3))
-            case inf if inf == TM.toString => TerminalModule(info(1).toInt, info(2).toInt, info(3))
-            case _ => throw new Exception("WTF")
-          }
-        )
-      }
-      stationInfo.append(lineInfo.toList)
-      lineInfo.clear()
-    }
-    stationInfo.toList
-  }
-
   def main(args: Array[String]): Unit = {
-    //defaultStation()
-    println(SpaceStation(parseStation(defaultStationArr)).build)//.slowlyPrint(250)
+    defaultStation()
+    SpaceStation(SpaceStation.parseStation(defaultStationArr)).slowlyPrint(250)
   }
 
 }
